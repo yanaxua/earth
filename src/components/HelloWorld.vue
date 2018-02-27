@@ -344,7 +344,6 @@ export default {
       me.earthIns.hideLoading();
       me.legendShow = true;
       var timerId = setTimeout(function() {
-        // window.removeEventListener("click",clearTimerId);
         me.toDeep();
       }, 2000)
       var clearTimerId = function() {
@@ -393,10 +392,10 @@ export default {
           }
         });
       }
-      // var timeA = this.worldIns ? 10 : 1500;
-      var timeA = row ? 10 : 1500;
 
       /**echarts地图展示*/
+
+      // var timeA = this.worldIns ? 10 : 1500;
       // setTimeout(function() {
       //   me.worldShow = true;
       //   var option = JSON.parse(JSON.stringify(me.nation));
@@ -512,6 +511,7 @@ export default {
       // }, timeA);
 
       /**百度地图展示*/
+      var timeA = me.bdMap ? 10 : 1500;
       setTimeout(function() {
         me.worldShow = true;
         me.$nextTick(() => {
@@ -523,10 +523,6 @@ export default {
             /**创建百度地图实例 */
             me.bdMap = new BMap.Map("china");
           }
-          // for (let i = 0; i < me.markerLis.length; i++) {
-          //   var temp = me.markerLis[i];
-          //   me.bdMap.removeOverlay(temp);
-          // }
           me.markerLis.forEach(item => {
             me.bdMap.removeOverlay(item);
           })
@@ -535,6 +531,8 @@ export default {
           var [minX, maxX, minY, maxY] = [360, 0, 360, 0];
           for (let i = 0; i < me.equipmentList.length; i++) {
             let temp = me.equipmentList[i];
+
+            /**FIXME:未进入地图时的直接转换bug*/
             if (!row) {
               temp.value[0] <= minX && (minX = temp.value[0]);
               temp.value[0] >= maxX && (maxX = temp.value[0]);
@@ -544,9 +542,9 @@ export default {
             if (!row || (row && row.industryName == temp.industryName)) {
               let point = new BMap.Point(temp.value[0], temp.value[1]);/*创建数据点*/
               me.equipmentList[i].point = point;/*添加到数据属性*/
-              var myIcon = new BMap.Icon(me.legendPath[temp.type].path, new BMap.Size(35, 35), {/*创建图标*/
-                imageSize: new BMap.Size(35, 35),
-                anchor: new BMap.Size(17.5, 35)
+              var myIcon = new BMap.Icon(me.legendPath[temp.type].path, new BMap.Size(32, 35), {/*创建图标*/
+                imageSize: new BMap.Size(32, 35),
+                anchor: new BMap.Size(16, 35)
               });
               var marker = new BMap.Marker(point, { icon: myIcon });
               marker.addEventListener("click", function(e) {/**标记点点击事件 */
@@ -568,13 +566,38 @@ export default {
           var [centerX, centerY] = [(minX + maxX) / 2, (minY + maxY) / 2];
           /**设置地图中心*/
           if (row) {
-            // me.bdMap.centerAndZoom(new BMap.Point(row.value[0], row.value[1]), 8);
-            // me.bdMap.setZoom(11);
             me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
           } else {
             me.bdMap.centerAndZoom(new BMap.Point(centerX, centerY), 8);
           }
-          // map.addControl(new BMap.MapTypeControl());
+          /**浏览器定位当前地址*/
+          // var geolocation = new BMap.Geolocation();
+          // geolocation.getCurrentPosition(function(r) {
+          //   if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+          //     console.log(r);
+          //     // var mk = new BMap.Marker(r.point);
+          //     // var label = new BMap.Label("您当前的位置 - " + r.address.city, { offset: new BMap.Size(20, -10) });/*创建文字框*/
+          //     // label.setStyle({ cursor: "pointer" });
+          //     // mk.setLabel(label);
+          //     // me.bdMap.addOverlay(mk);
+          //   }
+          //   else {
+          //     alert('failed' + this.getStatus());
+          //   }
+          // });
+
+          /**IP定位当前地址*/
+          // function myFun(result) {
+          //   var cityName = result.name;
+          //   console.log(result);
+          //   var mk = new BMap.Marker(result.center);
+          //   var label = new BMap.Label("您当前的位置 - " + result.name, { offset: new BMap.Size(20, -10) });/*创建文字框*/
+          //   label.setStyle({ cursor: "pointer" });
+          //   mk.setLabel(label);
+          //   me.bdMap.addOverlay(mk);
+          // }
+          // var myCity = new BMap.LocalCity();
+          // myCity.get(myFun);
           me.bdMap.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_SATELLITE_MAP] }));
           me.bdMap.enableScrollWheelZoom(true);
           me.bdMap.enableDoubleClickZoom(true);
