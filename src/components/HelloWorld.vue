@@ -1,11 +1,9 @@
 <template>
   <div id="earthContent">
-    <transition-group name="fade" mode="out-in">
-      <div key="earth" id="earth" class="list-item">
-      </div>
-      <!--<div key="world" v-show="worldShow" id="world" class="list-item"></div>-->
-      <div key="china" v-show="worldShow" id="china"> </div>
-    </transition-group>
+    <div key="earth" id="earth" class="list-item">
+    </div>
+    <!--<div key="world" v-show="worldShow" id="world" class="list-item"></div>-->
+    <div key="china" v-show="worldShow" id="china"> </div>
     <div id="legend" v-show="legendShow">
       <div v-for="(item,key) in legendPath" :key="key">
         <img :src="item.path" alt="key" draggable="false">
@@ -237,7 +235,7 @@ export default {
       hoverFlag: true,/*滚动框标记*/
       loading: null,
       bdMap: null,/**百度地图实例 */
-      markerLis: []/**百度地图当前标记点*/
+      markerLis: [],/**百度地图当前标记点*/
     }
   },
   computed: {
@@ -518,27 +516,32 @@ export default {
           // var china = document.getElementById("china");
           var list = document.querySelector("#earthContent .legend_industry ul");
           list.classList.add("hidden");
-
           if (!me.bdMap) {
             /**创建百度地图实例 */
             me.bdMap = new BMap.Map("china");
+            me.bdMap.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_SATELLITE_MAP] }));
+            me.bdMap.enableScrollWheelZoom(true);/**滚轮缩放 */
+            me.bdMap.enableDoubleClickZoom(true);/**双击缩放 */
+            me.bdMap.enableInertialDragging(true);/**惯性拖动 */
+            me.bdMap.enableContinuousZoom(true);/**连续缩放效果 */
+            me.bdMap.centerAndZoom(new BMap.Point(108.56, 34.15), 5);
           }
+          var tempFlag = 0;/*用于判断之前是否有过点,用于第一次只进入某一个数据时*/
           me.markerLis.forEach(item => {
             me.bdMap.removeOverlay(item);
+            tempFlag++;
           })
-          // me.bdMap.clearOverlays();
           /**计算位置中心,以及添加标注*/
           var [minX, maxX, minY, maxY] = [360, 0, 360, 0];
           for (let i = 0; i < me.equipmentList.length; i++) {
             let temp = me.equipmentList[i];
-
-            /**FIXME:未进入地图时的直接转换bug*/
             if (!row) {
               temp.value[0] <= minX && (minX = temp.value[0]);
               temp.value[0] >= maxX && (maxX = temp.value[0]);
               temp.value[1] <= minY && (minY = temp.value[1]);
               temp.value[1] >= maxY && (maxY = temp.value[1]);
             }
+            var [centerX, centerY] = [(minX + maxX) / 2, (minY + maxY) / 2];
             if (!row || (row && row.industryName == temp.industryName)) {
               let point = new BMap.Point(temp.value[0], temp.value[1]);/*创建数据点*/
               me.equipmentList[i].point = point;/*添加到数据属性*/
@@ -549,7 +552,29 @@ export default {
               var marker = new BMap.Marker(point, { icon: myIcon });
               marker.addEventListener("click", function(e) {/**标记点点击事件 */
                 window.location.href = "./yanshi/yunxingjiance.html";
-              })
+              });
+              // // 鼠标经过时,显示详情
+              // marker.addEventListener("mouseover", function(e) {
+              //   var opts = {
+              //     width: 250,     // 信息窗口宽度    
+              //     height: 100,     // 信息窗口高度    
+              //     title: temp.industryName  // 信息窗口标题   
+              //   }
+              //   var infoWindow = new BMap.InfoWindow("World", opts);  // 创建信息窗口对象    
+              //   marker.openInfoWindow(infoWindow, marker.getPosition());      // 打开信息窗口
+              //   // var label = this.getLabel();
+              //   // label.setStyle({
+              //   // display: "block"
+              //   // });
+              // });
+              // // 鼠标离开时,隐藏详情
+              // marker.addEventListener("mouseout", function(e) {
+              //   marker.closeInfoWindow();/**关闭信息窗口 */
+              //   // var label = this.getLabel();
+              //   // label.setStyle({
+              //   //   display: "none"
+              //   // });
+              // });
               me.markerLis.push(marker);
               me.bdMap.addOverlay(marker);
               var label = new BMap.Label(temp.industryName, { offset: new BMap.Size(20, -10) });/*创建文字框*/
@@ -563,13 +588,17 @@ export default {
               }
             }
           }
-          var [centerX, centerY] = [(minX + maxX) / 2, (minY + maxY) / 2];
           /**设置地图中心*/
           if (row) {
-            me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
+            /**页面初始化之前需设定中心点,未设置不能进行平移panto操作*/
+            // tempFlag == 0 ? me.bdMap.centerAndZoom(new BMap.Point(row.value[0], row.value[1]), 8) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
+            // tempFlag == 0 ? me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 }) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
+            
           } else {
-            me.bdMap.centerAndZoom(new BMap.Point(centerX, centerY), 8);
+            // me.bdMap.centerAndZoom(new BMap.Point(centerX, centerY), 8);
+            // me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 })
           }
+          me.bdMap.setViewport({ center: new BMap.Point(108.56,34.15), zoom: 10 },{enableAnimation:true})
           /**浏览器定位当前地址*/
           // var geolocation = new BMap.Geolocation();
           // geolocation.getCurrentPosition(function(r) {
@@ -598,9 +627,6 @@ export default {
           // }
           // var myCity = new BMap.LocalCity();
           // myCity.get(myFun);
-          me.bdMap.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_SATELLITE_MAP] }));
-          me.bdMap.enableScrollWheelZoom(true);
-          me.bdMap.enableDoubleClickZoom(true);
         })
       }, timeA);
     },
