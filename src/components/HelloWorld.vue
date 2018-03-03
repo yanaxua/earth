@@ -43,16 +43,16 @@ export default {
   data() {
     return {
       option: {
-        title: {
-          text: '迪奥远程运维及代管平台',
-          subtext: '欢迎登录迪奥平台',
-          sublink: 'http://www.dyiaw.com',
-          x: 'center',
-          textStyle: {
-            color: 'white',
-            fontSize: "30"
-          }
-        },
+        // title: {
+        //   text: '迪奥远程运维及代管平台',
+        //   subtext: '欢迎登录迪奥平台',
+        //   sublink: 'http://www.dyiaw.com',
+        //   x: 'center',
+        //   textStyle: {
+        //     color: 'white',
+        //     fontSize: "30"
+        //   }
+        // },
         globe: {
           backgroundColor: '#000',
           environment: 'static/image/starfield.jpg',
@@ -382,7 +382,7 @@ export default {
               autoRotate: false,
               distance: 70,
               animation: true,/*开启过渡动画*/
-              animationDurationUpdate: 1500,
+              animationDurationUpdate: 3000,
               animationEasingUpdate: "linear",
               targetCoord: [113.31, 23.14]
               // targetCoord: [108.56,34.15]
@@ -509,7 +509,7 @@ export default {
       // }, timeA);
 
       /**百度地图展示*/
-      var timeA = me.bdMap ? 10 : 1500;
+      var timeA = me.bdMap ? 10 : 3000;
       setTimeout(function() {
         me.worldShow = true;
         me.$nextTick(() => {
@@ -522,7 +522,7 @@ export default {
             me.bdMap.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_SATELLITE_MAP] }));
             me.bdMap.enableScrollWheelZoom(true);/**滚轮缩放 */
             me.bdMap.enableDoubleClickZoom(true);/**双击缩放 */
-            me.bdMap.enableInertialDragging(true);/**惯性拖动 */
+            // me.bdMap.enableInertialDragging(true);/**惯性拖动 */
             me.bdMap.enableContinuousZoom(true);/**连续缩放效果 */
             me.bdMap.centerAndZoom(new BMap.Point(108.56, 34.15), 5);
           }
@@ -549,39 +549,55 @@ export default {
                 imageSize: new BMap.Size(32, 35),
                 anchor: new BMap.Size(16, 35)
               });
-              var marker = new BMap.Marker(point, { icon: myIcon });
+              let marker = new BMap.Marker(point, { icon: myIcon });
               marker.addEventListener("click", function(e) {/**标记点点击事件 */
-                window.location.href = "./yanshi/yunxingjiance.html";
+                // window.location.href = "./yanshi/jiliangqiju.html";
+                window.open("./yanshi/jiliangqiju.html");
               });
               // // 鼠标经过时,显示详情
-              // marker.addEventListener("mouseover", function(e) {
-              //   var opts = {
-              //     width: 250,     // 信息窗口宽度    
-              //     height: 100,     // 信息窗口高度    
-              //     title: temp.industryName  // 信息窗口标题   
-              //   }
-              //   var infoWindow = new BMap.InfoWindow("World", opts);  // 创建信息窗口对象    
-              //   marker.openInfoWindow(infoWindow, marker.getPosition());      // 打开信息窗口
-              //   // var label = this.getLabel();
-              //   // label.setStyle({
-              //   // display: "block"
-              //   // });
-              // });
-              // // 鼠标离开时,隐藏详情
-              // marker.addEventListener("mouseout", function(e) {
-              //   marker.closeInfoWindow();/**关闭信息窗口 */
-              //   // var label = this.getLabel();
-              //   // label.setStyle({
-              //   //   display: "none"
-              //   // });
-              // });
+              var opts = {
+                width: 0,     // 信息窗口宽度
+                height: 0,     // 信息窗口高度
+                offset: new BMap.Size(0, 0),
+                title: temp.industryName,  // 信息窗口标题
+              }
+              var tempHtml = "";
+              for (let j = 0; j < temp.equipment.length; j++) {
+                var tempB = temp.equipment[j];
+                tempHtml += "<p>" + (j + 1) + " . " + tempB + "</p>"
+              }
+              var infoWindow = new BMap.InfoWindow(tempHtml, opts);  // 创建信息窗口对象  
+              marker.addEventListener("mouseover", function(e) {
+                marker.openInfoWindow(infoWindow, marker);      // 打开信息窗口
+              });
+              // 鼠标离开时,隐藏详情
+              marker.addEventListener("mouseout", function(e) {
+                // setTimeout(function() { marker.closeInfoWindow(); }, 1000)
+              });
+
               me.markerLis.push(marker);
               me.bdMap.addOverlay(marker);
               var label = new BMap.Label(temp.industryName, { offset: new BMap.Size(20, -10) });/*创建文字框*/
               label.setStyle({ cursor: "pointer" });
               label.addEventListener("click", function(e) {/**文本框点击事件 */
-                window.location.href = "./yanshi/yunxingjiance.html";
+                // window.location.href = "./yanshi/jiliangqiju.html";
+                window.open("./yanshi/jiliangqiju.html");
               })
+              // // // 鼠标经过时,显示详情
+              // label.addEventListener("mouseover", function(e) {
+              //   var label = marker.getLabel();
+              //   var tempHtml = temp.industryName;
+              //   for (let j = 0; j < temp.equipment.length; j++) {
+              //     var tempB = temp.equipment[j];
+              //     tempHtml += "<p>" + (j + 1) + " . " + tempB + "</p>"
+              //   }
+              //   label.setContent(tempHtml);
+              // });
+              // // 鼠标离开时,隐藏详情
+              // label.addEventListener("mouseout", function(e) {
+              //   var label = marker.getLabel();
+              //   label.setContent(temp.industryName);
+              // });
               marker.setLabel(label);
               if (row && row.industryName == temp.industryName) {
                 break;
@@ -591,14 +607,14 @@ export default {
           /**设置地图中心*/
           if (row) {
             /**页面初始化之前需设定中心点,未设置不能进行平移panto操作*/
-            // tempFlag == 0 ? me.bdMap.centerAndZoom(new BMap.Point(row.value[0], row.value[1]), 8) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
+            tempFlag == 0 ? me.bdMap.centerAndZoom(new BMap.Point(row.value[0], row.value[1]), 8) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
             // tempFlag == 0 ? me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 }) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
-            
+            // window.open("./yanshi/jiliangqiju.html");
           } else {
-            // me.bdMap.centerAndZoom(new BMap.Point(centerX, centerY), 8);
+            me.bdMap.centerAndZoom(new BMap.Point(centerX, centerY), 8);
             // me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 })
           }
-          me.bdMap.setViewport({ center: new BMap.Point(108.56,34.15), zoom: 10 },{enableAnimation:true})
+          // me.bdMap.setViewport({ center: new BMap.Point(108.56,34.15), zoom: 10 },{enableAnimation:true})
           /**浏览器定位当前地址*/
           // var geolocation = new BMap.Geolocation();
           // geolocation.getCurrentPosition(function(r) {
@@ -632,7 +648,7 @@ export default {
     },
     toErr(row) {
       // if (this.worldIns != null) {
-      //   window.location.href = "./yanshi/yunxingjiance.html";
+      //   window.location.href = "./yanshi/jiliangqiju.html";
       // } else {
       this.toDeep(row);
       // }
@@ -642,7 +658,8 @@ export default {
         this.toDeep();
       } else if (this.equipmentList.some(item => item.industryName == parm.data.industryName)) {
         // this.$router.push({ name: 'layout', params: { username: parm.name } });
-        window.location.href = "./yanshi/yunxingjiance.html";
+        // window.location.href = "./yanshi/jiliangqiju.html";
+        window.open("./yanshi/jiliangqiju.html");
         // this.$router.push({ name: 'layout' });
       }
     },
@@ -713,12 +730,7 @@ export default {
   padding: 20px 0 20px 10px;
   background-color: rgba(255, 255, 255, .1);
   border-radius: 8px;
-}
-
-#earthContent .legend_industry ul.hidden {
-  background-color: rgba(255, 255, 255, .6);
-  color: #000;
-  box-shadow: 0px 5px 18px #888;
+  padding-right: 6px;
 }
 
 #earthContent .legend_industry li {
@@ -727,17 +739,30 @@ export default {
   padding-left: 10px;
   border-left: 4px solid #aaa;
   cursor: pointer;
+  min-width: 140px;
+  max-width: 180px;
 }
+
+#earthContent .legend_industry ul.hidden {
+  background-color: rgba(255, 255, 255, .8);
+  color: #000;
+  box-shadow: 0px 5px 18px #888;
+}
+
+#earthContent .legend_industry ul.hidden li {
+  color: #13589e;
+}
+
 
 #earthContent .hidden li {
   border-left: 4px solid #fff;
-  background-color: rgba(0, 0, 0, .1);
+  /*background-color: rgba(0, 0, 0, .1);*/
   border-left: 4px solid #ff5e00e8;
 }
 
 #earthContent .legend_industry li:hover {
   border-left: 4px solid #ff5e00e8;
-  background-color: rgba(0, 0, 0, .2);
+  background-color: rgba(0, 0, 0, .1);
 }
 
 #earthContent .legend_industry p {
@@ -773,7 +798,7 @@ export default {
 }
 
 #legend img {
-  width: 30px;
+  width: 40px;
   vertical-align: middle;
   /*height: 100px;*/
 }
