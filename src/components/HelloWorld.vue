@@ -1,22 +1,29 @@
 <template>
   <div id="earthContent">
-    <div key="earth" id="earth" class="list-item">
+    <div key="earth" id="earth" :class="['list-item',worldIns?'earthHidden':'']">
     </div>
-    <!--<div key="world" v-show="worldShow" id="world" class="list-item"></div>-->
-    <div key="china" v-show="worldShow" id="china"> </div>
+    <div key="world" v-show="worldShow" id="world" :class="'list-item'"></div>
+    <!--故障列表滑动框-->
+    <div id="company" v-text="industryName"></div>
     <div id="legend" v-show="legendShow">
-      <div v-for="(item,key) in legendPath" :key="key">
+      <!--隐藏图例图片-->
+      <div v-show="false" v-for="(item,key) in legendPath" :key="key">
         <img :src="item.path" alt="key" draggable="false">
         <span v-text="item.name" :class="item.type"></span>
       </div>
     </div>
-    <!--故障列表滑动框-->
+    <div id="dataList">
+      <div v-for="(item,index) in equipmentList" :key="index" @click="toErr(item)">
+        <img :src="'static/logo/'+item.path+'.png'" :alt="item.industryName">
+        <span v-text="item.industryName"></span>
+      </div>
+    </div>
     <div class="legend_industry" v-show="legendShow">
       <ul @mouseover="hoverFlag = false" @mouseout="hoverFlag = true">
         <li v-for="(item,index) in errEquipment" :key="item.id" @click="toErr(item)" :title="item.industryName">
-          <p class="name" v-text="item.name"></p>
-          <p :class="['describe',item.type]" v-text="item.describe"></p>
-          <p class="time" v-text="item.time"></p>
+          <span class="name" v-text="item.name"></span>
+          <span class="warning" v-text="item.describe"></span>
+          <span class="time" v-text="item.time"></span>
         </li>
       </ul>
     </div>
@@ -26,9 +33,110 @@
         </el-option>
       </el-select>
     </div>
-    <el-dialog title="提示" :visible.sync="chinaVisible" width="90%" height="100%" style="margin-top: 10px;">
-      <!--<div id="china"> </div>-->
-    </el-dialog>
+    <div id="sunburst" :class="listShow?'showLis':'hiddenLis'">
+      <button @click="listShow = false">X</button>
+      <div class="cicrelOne">
+        <ul class="cicrel">
+          <li class="innCicrel cicrel0 cicrel01">
+            <span :class="['innerCicrel1',activeClass==1?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel02">
+            <span :class="['innerCicrel1',activeClass==2?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel03">
+            <span :class="['innerCicrel1',activeClass==3?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel04">
+            <span :class="['innerCicrel1',activeClass==4?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel05">
+            <span :class="['innerCicrel1',activeClass==5?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel06">
+            <span :class="['innerCicrel1',activeClass==6?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel07">
+            <span :class="['innerCicrel1',activeClass==7?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel0 cicrel08">
+            <span :class="['innerCicrel1',activeClass==8?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel1"></li>
+          <li class="innCicrel cicrel2">
+            <span :class="['one',activeClassOne==1?'active':'']"></span>
+            <span :class="['two',activeClassOne==2?'active':'']"></span>
+          </li>
+          <li class="innCicrel cicrel3"></li>
+          <li class="innCicrel cicrel4"></li>
+          <li class="innCicrel cicrel5"></li>
+        </ul>
+        <ul class="optionLis" v-show="listShow">
+          <!--<li v-for="(item,index) in linkLis" :key="index" :class="['cicrel00'+(index+1),activeClass==index+1?'active':'']" @click="'cicrel00'+(index+1)" v-text="item.name"></li>-->
+          <li :class="['cicrel001',activeClass==1?'active':'']" @click="cicrel001">计量与传感</li>
+          <li :class="['cicrel002',activeClass==2?'active':'']" @click="cicrel002">计量传感网络</li>
+          <li :class="['cicrel003',activeClass==3?'active':'']" @click="cicrel003">IT网络</li>
+          <li :class="['cicrel004',activeClass==4?'active':'']" @click="cicrel004">IDC</li>
+          <li :class="['cicrel005',activeClass==5?'active':'']" @click="cicrel005">监测报告</li>
+          <li :class="['cicrel006',activeClass==6?'active':'']" @click="cicrel006">故障定位</li>
+          <li :class="['cicrel007',activeClass==7?'active':'']" @click="cicrel007">故障修复</li>
+          <li :class="['cicrel008',activeClass==8?'active':'']" @click="cicrel008">远程托管</li>
+          <li :class="['cicrel009',activeClassOne==1?'active':'']" @click="cicrel009">能管</li>
+          <li :class="['cicrel010',activeClassOne==2?'active':'']" @click="cicrel010">中央空调</li>
+        </ul>
+        <div class="innerContent">
+          <p class="fl">
+            <span class="value" v-text="randomNumber"></span>
+            <span class="title">设备总数</span>
+          </p>
+          <ul class="fr">
+            <li>
+              <span class="title">故障</span>
+              <span class="value" v-text="Math.floor(randomNumber/200)"></span>
+            </li>
+            <li>
+              <span class="title">运维次数</span>
+              <span class="value" v-text="Math.floor(randomNumber/100)"></span>
+            </li>
+            <li>
+              <span class="title">无故障运行时间</span>
+              <span class="value" v-text="Math.floor(randomNumber*2.5)+'h'"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="chooseOne">
+        <!--<select>
+                                                <option value="volvo">拓扑软件</option>
+                                                <option value="saab">图形软件</option>
+                                              </select>
+                                              <select>
+                                                <option value="volvo">软件园二期</option>
+                                                <option value="saab">软件园一期</option>
+                                                <option value="opel">软件园三期</option>
+                                                <option value="audi">软件园四期</option>
+                                              </select>
+                                              <select>
+                                                <option value="volvo">全部</option>
+                                                <option value="saab">一期</option>
+                                                <option value="opel">二期</option>
+                                                <option value="audi">三期</option>
+                                              </select>
+                                              <select>
+                                                <option value="volvo">月</option>
+                                                <option value="saab">年</option>
+                                                <option value="opel">日</option>
+                                                <option value="audi">周</option>
+                                              </select>-->
+      </div>
+      <div>
+        <!--<div id="echarts1"></div>-->
+        <div id="echarts2"></div>
+      </div>
+    </div>
+    <div class="aiframe" v-show="iframeShow">
+      <button @click="iframeShow = false">X</button>
+      <iframe name="aiframe" id="aiframe" src="#" frameborder="1" width="100%" height="100%"></iframe>
+    </div>
   </div>
 </template>
 <script>
@@ -43,16 +151,6 @@ export default {
   data() {
     return {
       option: {
-        // title: {
-        //   text: '迪奥远程运维及代管平台',
-        //   subtext: '欢迎登录迪奥平台',
-        //   sublink: 'http://www.dyiaw.com',
-        //   x: 'center',
-        //   textStyle: {
-        //     color: 'white',
-        //     fontSize: "30"
-        //   }
-        // },
         globe: {
           backgroundColor: '#000',
           environment: 'static/image/starfield.jpg',
@@ -153,6 +251,7 @@ export default {
           industryName: '韶关永盛山庄',
           value: [113.580262, 24.808615, 500],
           id: 1,
+          path: "deli",
           type: "normal",
           equipment: ["中央空调#450", "中央空调#551", "能管设备#071", "能管设备#071"],
           errEquipment: [{
@@ -166,6 +265,7 @@ export default {
           industryName: '茂名汇丰酒店',
           value: [110.924231, 21.670108, 180],
           id: 2,
+          path: "dianzi",
           type: "warning",
           equipment: ["中央空调#856", "能管设备#789", "能管设备#071"],
           errEquipment: [{
@@ -179,6 +279,7 @@ export default {
           industryName: '汕尾东鹏建材',
           value: [115.410654, 22.816221, 90],
           id: 3,
+          path: "dongyu",
           type: "danger",
           equipment: ["中央空调#410", "中央空调#645", "能管设备#566"],
           errEquipment: [{
@@ -197,6 +298,7 @@ export default {
           industryName: '梅州百胜电脑',
           value: [116.132646, 24.30242, 87],
           id: 4,
+          path: "fujiayi",
           type: "danger",
           equipment: ["中央空调#750", "中央空调#895", "能管设备#451"],
           errEquipment: [{
@@ -210,6 +312,7 @@ export default {
           industryName: '广州东宝大厦',
           value: [113.317982, 23.137914, 87],
           id: 5,
+          path: "fuwa",
           type: "normal",
           equipment: ["中央空调#D235", "中央空调#D695", "能管设备#D551"],
           errEquipment: [{
@@ -228,14 +331,145 @@ export default {
         normal: { name: "正常", path: "static/image/legend_normal.png" },
         warning: { name: "警告", path: "static/image/legend_warning.png" },
         danger: { name: "故障", path: "static/image/legend_danger.png" }
+        // normal: { name: "正常", path: "static/image/circle.png" },
+        // warning: { name: "警告", path: "static/image/circle.png" },
+        // danger: { name: "故障", path: "static/image/circle.png" }
       },
       legendShow: false,
       worldShow: false,
-      chinaShow: false,
+      listShow: false,/**菜单显隐*/
+      iframeShow: false,/**弹框显隐*/
       hoverFlag: true,/*滚动框标记*/
       loading: null,
       bdMap: null,/**百度地图实例 */
       markerLis: [],/**百度地图当前标记点*/
+      imgsrc: "1",/*图片路径*/
+      activeClass: 3,
+      activeClassOne: 1,
+      echarts1: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['输风机能耗', '压缩机能耗'],
+          textStyle: {
+            color: "#75afff"
+          }
+        },
+        grid: {
+          left: '0',
+          right: '0',
+          bottom: '0',
+          top: "0",
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLabel: {
+              color: "#75afff"
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              color: "#75afff"
+            }
+          }
+        ],
+        series: [
+          {
+            name: '输风机能耗',
+            type: 'line',
+            stack: '总量',
+            areaStyle: { normal: {} },
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: '压缩机能耗',
+            type: 'line',
+            stack: '总量',
+            areaStyle: { normal: {} },
+            data: [220, 182, 191, 234, 290, 330, 310]
+          }
+        ]
+      },
+      echarts2: {
+        title: {
+          text: "故障率",
+          left: "center",
+          top: -2,
+          textStyle: {
+            color: "#75afff"
+          }
+        },
+        color: ['#3398DB'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '1%',
+          right: '1%',
+          bottom: '1%',
+          top: "16%",
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLabel: {
+              color: "#75afff"
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              color: "#75afff"
+            }
+          }
+        ],
+        series: [
+          {
+            name: '故障率',
+            type: 'bar',
+            barWidth: '60%',
+            data: [10, 8, 3, 5, 6, 7, 5]
+          }
+        ]
+      },
+      randomNumber: 555,/**随机数 */
+      currentMarker: null,/**之前点击的marker,用于判断信息显隐*/
+      linkLis: [
+        { name: "计量与传感", path: "jiliangqiju_nengguan" },
+        { name: "计量传感网络", path: "zhinengchuanganwangluo" },
+        { name: "IT网络", path: "itwangluo_nengguan" },
+        { name: "IDC", path: "idc_nengguan" },
+        { name: "监测报告", path: "jiancebaogao_neirong_nengguan" },
+        { name: "故障定位", path: "keshihuajiance" },
+        { name: "故障修复", path: "guzhangxiufu_xiangqing" },
+        { name: "远程托管", path: "yuanchengyemian" },
+        { name: "能管", path: "" },
+        { name: "中央空调", path: "" },
+      ]
     }
   },
   computed: {
@@ -302,16 +536,16 @@ export default {
                 borderColor: "rgba(0,0,0,0.6)",
                 borderWidth: 1,
                 height: 0,
-                lineHeight: 12
+                lineHeight: 12,
               },
               equipment: {
                 fontSize: 16,
                 color: "#000",
-                lineHeight: 20
+                lineHeight: 20,
               }
             },
             position: "top",
-            backgroundColor: '#eee',
+            backgroundColor: "#eee",
             borderColor: '#555',
             borderWidth: 2,
             borderRadius: 5,
@@ -331,30 +565,47 @@ export default {
   },
   mounted() {
     let me = this;
-    this.earthIns = this.$echarts.init(document.getElementById("earth"));
-    this.earthIns.showLoading();
-    this.option.globe.layers[0].texture = this.nationIns;
-    this.earthIns.setOption(this.option);
-    /**转动到指定位置 */
-    /**窗口重置的监听 */
-    window.addEventListener("resize", me.echartsResize());
-    setTimeout(function() {
-      me.earthIns.hideLoading();
-      me.legendShow = true;
-      var timerId = setTimeout(function() {
-        me.toDeep();
-      }, 2000)
-      var clearTimerId = function() {
-        clearTimeout(timerId);
+
+    me.toDeep();
+
+
+    // this.earthIns = this.$echarts.init(document.getElementById("earth"));
+    // this.earthIns.showLoading();
+    // this.option.globe.layers[0].texture = this.nationIns;
+    // this.earthIns.setOption(this.option);
+    // /**转动到指定位置 */
+    // /**窗口重置的监听 */
+    // window.addEventListener("resize", me.echartsResize());
+    // setTimeout(function() {
+    //   me.earthIns.hideLoading();
+    me.legendShow = true;
+
+    //   // var echarts1 = me.$echarts.init(document.getElementById("echarts1"));
+    //   var echarts2 = me.$echarts.init(document.getElementById("echarts2"));
+    //   // echarts1.setOption(me.echarts1);
+    //   echarts2.setOption(me.echarts2)
+    //   setInterval(function() {
+    //     // me.echarts1.series[0].data.shift();
+    //     // me.echarts1.series[0].data.push((180 + Math.random() * 50));
+    //     // echarts1.setOption(me.echarts1);
+    //     me.echarts2.series[0].data.shift();
+    //     me.echarts2.series[0].data.push((1 + Math.random() * 5));
+    //     echarts2.setOption(me.echarts2);
+    //   }, 1000);
+    //   var timerId = setTimeout(function() {
+    //     me.toDeep();
+    //   }, 2000)
+    //   var clearTimerId = function() {
+    //     clearTimeout(timerId);
+    //   }
+    //   window.addEventListener("click", clearTimerId);
+    setInterval(function() {
+      if (me.hoverFlag) {
+        var temp = me.errEquipment.splice(0, 1);
+        me.errEquipment.push(...temp);
       }
-      window.addEventListener("click", clearTimerId);
-      setInterval(function() {
-        if (me.hoverFlag) {
-          var temp = me.errEquipment.splice(0, 1);
-          me.errEquipment.push(...temp);
-        }
-      }, 2000);
-    }, 1000)
+    }, 2000);
+    // }, 1000)
   },
   beforeRouteLeave(to, from, next) {
     /*摧毁echarts实例*/
@@ -376,150 +627,195 @@ export default {
     toDeep(row) {
       let me = this;
       if (this.worldIns == null) {
-        this.earthIns.setOption({
-          globe: {
-            viewControl: {
-              autoRotate: false,
-              distance: 70,
-              animation: true,/*开启过渡动画*/
-              animationDurationUpdate: 3000,
-              animationEasingUpdate: "linear",
-              targetCoord: [113.31, 23.14]
-              // targetCoord: [108.56,34.15]
-            }
-          }
-        });
+        // this.earthIns.setOption({
+        //   globe: {
+        //     viewControl: {
+        //       autoRotate: false,
+        //       distance: 70,
+        //       animation: true,/*开启过渡动画*/
+        //       animationDurationUpdate: 1500,
+        //       animationEasingUpdate: "linear",
+        //       targetCoord: [113.31, 23.14]
+        //       // targetCoord: [108.56,34.15]
+        //     }
+        //   }
+        // });
       }
-
-      /**echarts地图展示*/
-
-      // var timeA = this.worldIns ? 10 : 1500;
-      // setTimeout(function() {
-      //   me.worldShow = true;
-      //   var option = JSON.parse(JSON.stringify(me.nation));
-      //   me.$nextTick(() => {
-      //     var world = document.getElementById("world");
-      //     if (!me.worldIns) {
-      //       me.worldIns = me.$echarts.init(world);
-      //     }
-      //     option.backgroundColor = {
-      //       color: "#fff"
-      //     }
-      //     option.title = {
-      //       text: '迪奥科技运维企业地图分布',
-      //       x: '10%',
-      //       textStyle: {
-      //         color: 'white',
-      //         fontSize: "30",
-      //         textBorderColor: "#000",
-      //         textBorderWidth: 2
-      //       }
-      //     }
-      //     option.geo = {
-      //       type: 'map',
-      //       map: '广东',
-      //       // roam: true,
-      //       zoom: 1.2,
-      //       // boundingCoords: [[-180, 90], [180, -90]],
-      //       itemStyle: {
-      //         normal: {
-      //           areaColor: '#E6A23C',
-      //           borderColor: '#fff'
-      //         },
-      //         emphasis: {
-      //           areaColor: '#67C23A'
-      //         }
-      //       },
-      //       label: {
-      //         show: false
-      //       }
-      //     };
-      //     for (let i = 0; i < me.equipmentList.length; i++) {
-      //       let temp = me.equipmentList[i];
-      //       let tempObj = {
-      //         type: 'scatter',
-      //         coordinateSystem: 'geo',
-      //         geoIndex: 0,
-      //         data: [temp],
-      //         symbol: "image://" + me.legendPath[temp.type].path,
-      //         symbolOffset: [0, '-50%'],
-      //         // symbolSize: row ? 0 : 40,
-      //         symbolSize: 40,
-      //         label: {
-      //           normal: {
-      //             formatter: function(params, ticket, callback) {
-      //               return params.data.equipment.length;
-      //             },
-      //             show: true
-      //           },
-      //           emphasis: {
-      //             formatter: function(params, ticket, callback) {
-      //               var arr = [
-      //                 '{name|' + params.data.industryName + '}',
-      //                 '{hr|}'
-      //               ];
-      //               params.data.equipment.forEach(function(element, index) {
-      //                 arr.push('{equipment|' + (index + 1) + '.' + element + '}');
-      //               });
-      //               return arr.join("\n");
-      //             },
-      //             color: "#000",
-      //             rich: {
-      //               name: {
-      //                 fontSize: 16,
-      //                 color: "#000"
-      //               },
-      //               hr: {
-      //                 width: "100%",
-      //                 borderColor: "rgba(0,0,0,0.6)",
-      //                 borderWidth: 1,
-      //                 height: 0,
-      //                 lineHeight: 12
-      //               },
-      //               equipment: {
-      //                 fontSize: 16,
-      //                 color: "#000",
-      //                 lineHeight: 20
-      //               }
-      //             },
-      //             position: "right",
-      //             backgroundColor: '#eee',
-      //             borderColor: '#555',
-      //             borderWidth: 2,
-      //             borderRadius: 5,
-      //             padding: 10,
-      //             show: true
-      //           }
-      //         }
-      //       }
-      //       if (row && row.industryName == temp.industryName) {
-      //         tempObj.label.normal = tempObj.label.emphasis;
-      //         tempObj.symbolSize = 40;
-      //         option.series = [tempObj];
-      //         break;
-      //       } else {
-      //         option.series[i] = tempObj;
-      //       }
-      //     }
-      //     var list = document.querySelector("#earthContent .legend_industry ul");
-      //     list.classList.add("hidden");
-      //     me.worldIns.setOption(option, { notMerge: !!row });
-      //     me.worldIns.on("click", me.showChina);
-      //   })
-      // }, timeA);
-
       /**百度地图展示*/
-      var timeA = me.bdMap ? 10 : 3000;
+      var timeA = me.bdMap ? 10 : 1500;
       setTimeout(function() {
         me.worldShow = true;
         me.$nextTick(() => {
-          // var china = document.getElementById("china");
           var list = document.querySelector("#earthContent .legend_industry ul");
           list.classList.add("hidden");
           if (!me.bdMap) {
             /**创建百度地图实例 */
-            me.bdMap = new BMap.Map("china");
+            me.bdMap = new BMap.Map("world");
             me.bdMap.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_SATELLITE_MAP] }));
+            me.bdMap.setMapStyle({
+              styleJson: [
+                {
+                  "featureType": "water",
+                  "elementType": "all",
+                  "stylers": {
+                    "color": "#021019"
+                  }
+                },
+                {
+                  "featureType": "highway",
+                  "elementType": "geometry.fill",
+                  "stylers": {
+                    "visibility": "off"
+                  }
+                },
+                {
+                  "featureType": "highway",
+                  "elementType": "geometry.stroke",
+                  "stylers": {
+                    "visibility": "off"
+                  }
+                },
+                {
+                  "featureType": "arterial",
+                  "elementType": "geometry.fill",
+                  "stylers": {
+                    "color": "#000000"
+                  }
+                },
+                {
+                  "featureType": "arterial",
+                  "elementType": "geometry.stroke",
+                  "stylers": {
+                    "color": "#0b3d51"
+                  }
+                },
+                {
+                  "featureType": "local",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "color": "#000000",
+                  }
+                },
+                {
+                  "featureType": "land",
+                  "elementType": "all",
+                  "stylers": {
+                    "color": "#08304b"
+                  }
+                },
+                {
+                  "featureType": "railway",
+                  "elementType": "geometry.fill",
+                  "stylers": {
+                    "color": "#000000"
+                  }
+                },
+                {
+                  "featureType": "railway",
+                  "elementType": "geometry.stroke",
+                  "stylers": {
+                    "color": "#08304b"
+                  }
+                },
+                {
+                  "featureType": "subway",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "lightness": -70
+                  }
+                },
+                {
+                  "featureType": "building",
+                  "elementType": "geometry.fill",
+                  "stylers": {
+                    "color": "#000000"
+                  }
+                },
+                {
+                  "featureType": "all",
+                  "elementType": "labels.text.fill",
+                  "stylers": {
+                    "color": "#857f7f"
+                  }
+                },
+                {
+                  "featureType": "all",
+                  "elementType": "labels.text.stroke",
+                  "stylers": {
+                    "color": "#000000"
+                  }
+                },
+                {
+                  "featureType": "building",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "color": "#022338"
+                  }
+                },
+                {
+                  "featureType": "green",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "color": "#062032"
+                  }
+                },
+                {
+                  "featureType": "boundary",
+                  "elementType": "all",
+                  "stylers": {
+                    "color": "#1e1c1c"
+                  }
+                },
+                {
+                  "featureType": "boundary",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "hue": "#2e8bca"
+                  }
+                },
+                {
+                  "featureType": "manmade",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "color": "#022338"
+                  }
+                },
+                {
+                  "featureType": "poi",
+                  "elementType": "all",
+                  "stylers": {
+                    "visibility": "off"
+                  }
+                },
+                {
+                  "featureType": "all",
+                  "elementType": "labels.icon",
+                  "stylers": {
+                    "visibility": "off"
+                  }
+                },
+                {
+                  "featureType": "all",
+                  "elementType": "labels.text.fill",
+                  "stylers": {
+                    "color": "#2da0c6",
+                    "visibility": "on"
+                  }
+                },
+                {
+                  "featureType": "districtlabel",
+                  "elementType": "labels",
+                  "stylers": {}
+                },
+                {
+                  "featureType": "administrative",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "hue": "#2e8bca"
+                  }
+                }
+              ]
+            });
             me.bdMap.enableScrollWheelZoom(true);/**滚轮缩放 */
             me.bdMap.enableDoubleClickZoom(true);/**双击缩放 */
             // me.bdMap.enableInertialDragging(true);/**惯性拖动 */
@@ -532,6 +828,7 @@ export default {
             tempFlag++;
           })
           /**计算位置中心,以及添加标注*/
+          me.markerLis = [];
           var [minX, maxX, minY, maxY] = [360, 0, 360, 0];
           for (let i = 0; i < me.equipmentList.length; i++) {
             let temp = me.equipmentList[i];
@@ -545,14 +842,23 @@ export default {
             if (!row || (row && row.industryName == temp.industryName)) {
               let point = new BMap.Point(temp.value[0], temp.value[1]);/*创建数据点*/
               me.equipmentList[i].point = point;/*添加到数据属性*/
-              var myIcon = new BMap.Icon(me.legendPath[temp.type].path, new BMap.Size(32, 35), {/*创建图标*/
-                imageSize: new BMap.Size(32, 35),
-                anchor: new BMap.Size(16, 35)
+              var myIcon = new BMap.Icon("static/image/circle.png", new BMap.Size(120, 120), {/*创建图标*/
+                imageSize: new BMap.Size(120, 120),
+                anchor: new BMap.Size(60, 60)
+              });
+              var myIcon2 = new BMap.Icon("static/image/circle5.png", new BMap.Size(125, 120), {/*创建图标*/
+                imageSize: new BMap.Size(125, 120),
+                anchor: new BMap.Size(63, 60)
               });
               let marker = new BMap.Marker(point, { icon: myIcon });
               marker.addEventListener("click", function(e) {/**标记点点击事件 */
                 // window.location.href = "./yanshi/jiliangqiju.html";
-                window.open("./yanshi/jiliangqiju.html");
+                // window.open("./yanshi/jiliangqiju.html");
+                // if (me.currentMarker) {
+
+                // }
+                me.listShow = !me.listShow;
+                me.randomNumber = Math.floor(350 + Math.random() * 150);
               });
               // // 鼠标经过时,显示详情
               var opts = {
@@ -566,23 +872,58 @@ export default {
                 var tempB = temp.equipment[j];
                 tempHtml += "<p>" + (j + 1) + " . " + tempB + "</p>"
               }
-              var infoWindow = new BMap.InfoWindow(tempHtml, opts);  // 创建信息窗口对象  
+              var infoWindow = new BMap.InfoWindow(tempHtml, opts);  // 创建信息窗口对象
+              let animationId = null;
               marker.addEventListener("mouseover", function(e) {
-                marker.openInfoWindow(infoWindow, marker);      // 打开信息窗口
+                cancelAnimationFrame(animationId);
+                // marker.openInfoWindow(infoWindow, marker);      // 打开信息窗口
+                marker.setIcon(myIcon2);
+                let tempIcon = marker.getIcon();
+                let count = 0;
+                let innerfunc = function() {
+                  count++;
+                  var a = 125 + (286 - 125) / 20 * count;
+                  var b = 120 + (275 - 120) / 20 * count;
+                  tempIcon.setSize(new BMap.Size(a, b));
+                  tempIcon.setImageSize(new BMap.Size(a, b));
+                  tempIcon.setAnchor(new BMap.Size(a / 2, b / 2));
+                  marker.setIcon(tempIcon)
+                  if (count <= 25) {
+                    animationId = requestAnimationFrame(innerfunc);
+                  }
+                }
+                animationId = requestAnimationFrame(innerfunc);
+                var label;
+                // var ahtml = "<span>" + (Math.random() + "").substr(3, 2) + "</span>"
+                //   + "<div style='position:absolute;top:70%;right:5%;transform:translate(100%,-50%);width:380px;'><img style='width:100%;' src='static/image/kuang.png'/></div>"
+                var ahtml = `<span class="imgRotate">${(Math.random() + "").substr(3, 2)}</span>
+                <div style="position:absolute;top:50%;right:7%;transform:translate(100%,-50%);width:380px;height:380px;">
+                  <img style="position:absolute;top:50%;right:0;width:100%;transform:translate(0,-50%);" src="static/image/kuang.png"/>
+                  <div style="position:absolute;top:50%;right:50%;transform:translate(-50%,-50%);">`;
+                for (let k = 0; k < temp.equipment.length; k++) {
+                  var tempStr = temp.equipment[k]
+                  ahtml += `<span>${tempStr}</span>`
+                }
+                ahtml += "</div></div>";
+                label = marker.getLabel() || new BMap.Label(ahtml, { offset: new BMap.Size(72, 50) });
+                console.log(label);
+                label.setStyle({ width: "200px", height: "200px", lineHeight: "200px", textAlign: "center", cursor: "pointer", color: "#fff", fontSize: "50px", fontWeight: "700", backgroundColor: "transparent", border: "none", display: "block" });
+                marker.setLabel(label);
               });
               // 鼠标离开时,隐藏详情
               marker.addEventListener("mouseout", function(e) {
+                cancelAnimationFrame(animationId);
+                marker.setIcon(myIcon);
+                marker.getLabel().setStyle({ display: "none" });
                 // setTimeout(function() { marker.closeInfoWindow(); }, 1000)
               });
-
               me.markerLis.push(marker);
               me.bdMap.addOverlay(marker);
-              var label = new BMap.Label(temp.industryName, { offset: new BMap.Size(20, -10) });/*创建文字框*/
-              label.setStyle({ cursor: "pointer" });
-              label.addEventListener("click", function(e) {/**文本框点击事件 */
-                // window.location.href = "./yanshi/jiliangqiju.html";
-                window.open("./yanshi/jiliangqiju.html");
-              })
+              // var label = new BMap.Label(temp.industryName, { offset: new BMap.Size(20, -10) });/*创建文字框*/
+              // label.addEventListener("click", function(e) {/**文本框点击事件 */
+              // window.location.href = "./yanshi/jiliangqiju.html";
+              // window.open("./yanshi/jiliangqiju.html");
+              // })
               // // // 鼠标经过时,显示详情
               // label.addEventListener("mouseover", function(e) {
               //   var label = marker.getLabel();
@@ -598,8 +939,9 @@ export default {
               //   var label = marker.getLabel();
               //   label.setContent(temp.industryName);
               // });
-              marker.setLabel(label);
               if (row && row.industryName == temp.industryName) {
+                me.listShow = true;
+                me.randomNumber = Math.floor(350 + Math.random() * 150);
                 break;
               }
             }
@@ -607,11 +949,13 @@ export default {
           /**设置地图中心*/
           if (row) {
             /**页面初始化之前需设定中心点,未设置不能进行平移panto操作*/
-            tempFlag == 0 ? me.bdMap.centerAndZoom(new BMap.Point(row.value[0], row.value[1]), 8) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
+            tempFlag == 0 ? me.bdMap.centerAndZoom(new BMap.Point(row.value[0], row.value[1]), 9) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
             // tempFlag == 0 ? me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 }) : me.bdMap.panTo(new BMap.Point(row.value[0], row.value[1]));
+            // me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 })
             // window.open("./yanshi/jiliangqiju.html");
           } else {
             me.bdMap.centerAndZoom(new BMap.Point(centerX, centerY), 8);
+            var markerClusterer = new BMapLib.MarkerClusterer(me.bdMap, { markers: me.markerLis });
             // me.bdMap.setViewport({ center: new BMap.Point(row.value[0], row.value[1]), zoom: 10 })
           }
           // me.bdMap.setViewport({ center: new BMap.Point(108.56,34.15), zoom: 10 },{enableAnimation:true})
@@ -647,11 +991,7 @@ export default {
       }, timeA);
     },
     toErr(row) {
-      // if (this.worldIns != null) {
-      //   window.location.href = "./yanshi/jiliangqiju.html";
-      // } else {
       this.toDeep(row);
-      // }
     },
     showChina(parm) {
       if (parm.name && parm.name == "China") {
@@ -659,7 +999,8 @@ export default {
       } else if (this.equipmentList.some(item => item.industryName == parm.data.industryName)) {
         // this.$router.push({ name: 'layout', params: { username: parm.name } });
         // window.location.href = "./yanshi/jiliangqiju.html";
-        window.open("./yanshi/jiliangqiju.html");
+        // window.open("./yanshi/jiliangqiju.html");
+        this.listShow = true;
         // this.$router.push({ name: 'layout' });
       }
     },
@@ -685,6 +1026,7 @@ export default {
       for (let i = 0; i < this.equipmentList.length; i++) {
         var item = this.equipmentList[i];
         if (val == item.id) {
+          console.log(val);
           this.toErr(item);
           break;
         }
@@ -694,7 +1036,55 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(resolve(), time);
       });
-    }
+    },
+    cicrel001() {
+      this.iframeShow = true;
+      this.activeClass = 1;
+      window.open('./yanshi/jiliangqiju_nengguan.html', 'aiframe');
+    },
+    cicrel002() {
+      this.iframeShow = true;
+      this.activeClass = 2;
+      window.open('./yanshi/zhinengchuanganwangluo.html', 'aiframe');
+    },
+    cicrel003() {
+      this.iframeShow = true;
+      this.activeClass = 3;
+      window.open('./yanshi/itwangluo_nengguan.html', 'aiframe');
+    },
+    cicrel004() {
+      this.iframeShow = true;
+      this.activeClass = 4;
+      window.open('./yanshi/idc_nengguan.html', 'aiframe');
+    },
+    cicrel005() {
+      this.iframeShow = true;
+      this.activeClass = 5;
+      window.open('./yanshi/jiancebaogao_neirong_nengguan.html', 'aiframe');
+    },
+    cicrel006() {
+      this.iframeShow = true;
+      this.activeClass = 6;
+      window.open('./yanshi/keshihuajiance.html', 'aiframe');
+    },
+    cicrel007() {
+      this.iframeShow = true;
+      this.activeClass = 7;
+      window.open('./yanshi/guzhangxiufu_xiangqing.html', 'aiframe');
+    },
+    cicrel008() {
+      this.iframeShow = true;
+      this.activeClass = 8;
+      window.open('./yanshi/yuanchengyemian.html', 'aiframe');
+    },
+    cicrel009() {
+      this.activeClassOne = 1;
+      // this.iframeShow = true;
+    },
+    cicrel010() {
+      this.activeClassOne = 2;
+      // this.iframeShow = true;
+    },
   },
   watch: {
   }
@@ -709,44 +1099,77 @@ export default {
   height: 100%;
 }
 
+.aiframe {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  z-index: 999;
+}
+
+.aiframe button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6px;
+  cursor: pointer;
+}
+
+#aiframe {
+  background-color: #fff;
+}
+
+#earthContent li {
+  list-style: none;
+}
+
+#company {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 100px;
+  height: 20px;
+}
+
 #legend {
   position: absolute;
   right: 20px;
   bottom: 20px;
   user-select: none;
+  display: flex;
 }
 
 #earthContent .legend_industry {
   position: absolute;
-  left: 0;
-  top: 40%;
-  max-height: 400px;
-  transform: translate(0, -50%);
+  left: 20px;
+  bottom: 55px;
+  width: 380px;
+  /*height: 150px;*/
   color: #ccc;
-  font-size: 16px;
 }
 
 #earthContent .legend_industry ul {
-  padding: 20px 0 20px 10px;
+  padding: 10px;
   background-color: rgba(255, 255, 255, .1);
   border-radius: 8px;
   padding-right: 6px;
 }
 
 #earthContent .legend_industry li {
-  margin-bottom: 20px;
   user-select: none;
   padding-left: 10px;
-  border-left: 4px solid #aaa;
+  /*border-left: 4px solid #aaa;*/
   cursor: pointer;
-  min-width: 140px;
-  max-width: 180px;
 }
 
 #earthContent .legend_industry ul.hidden {
-  background-color: rgba(255, 255, 255, .8);
   color: #000;
-  box-shadow: 0px 5px 18px #888;
+  border: 1px solid #073067;
+  background-color: rgba(93, 152, 230, .1);
+  border-radius: 10px;
 }
 
 #earthContent .legend_industry ul.hidden li {
@@ -755,9 +1178,9 @@ export default {
 
 
 #earthContent .hidden li {
-  border-left: 4px solid #fff;
   /*background-color: rgba(0, 0, 0, .1);*/
-  border-left: 4px solid #ff5e00e8;
+  /*border-left: 4px solid #ff5e00e8;*/
+  display: flex;
 }
 
 #earthContent .legend_industry li:hover {
@@ -765,17 +1188,19 @@ export default {
   background-color: rgba(0, 0, 0, .1);
 }
 
-#earthContent .legend_industry p {
-  height: 20px;
+#earthContent .legend_industry span {
+  font-size: 14px;
+  flex: 1;
+  color: #71a9f7;
   line-height: 20px;
 }
 
 #earthContent .legend_industry .warning {
-  color: #e0620d;
+  color: #ff7c24;
 }
 
 #earthContent .hidden .warning {
-  color: orangered;
+  color: #ff7c24;
 }
 
 #earthContent .legend_industry .danger {
@@ -793,12 +1218,18 @@ export default {
 
 #earthContent .legend_input {
   position: absolute;
-  right: 10px;
-  top: 43px;
+  left: 20px;
+  top: 7px;
+}
+
+#earthContent .legend_input .el-input__inner {
+  background-color: #03173c;
+  color: #75afff;
 }
 
 #legend img {
-  width: 40px;
+  width: 25px;
+  margin-bottom: 8px;
   vertical-align: middle;
   /*height: 100px;*/
 }
@@ -825,6 +1256,10 @@ export default {
   overflow: hidden;
 }
 
+.el-select-dropdown {
+  background-color: #0c1935 !important;
+}
+
 #earthContent .el-dialog__body {
   padding-top: 0;
   height: 90%;
@@ -840,8 +1275,10 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  /*background: url("static/image/earth.jpg") no-repeat center;*/
-  background: url("../../static/image/earth.jpg") no-repeat center;
+  background: url("../../static/image/net.png");
+  background-size: 400px 225px;
+  /*background-color: #030b21;*/
+  background-color: rgba(54, 89, 139, .8) !important;
 }
 
 #earth {
@@ -849,12 +1286,8 @@ export default {
   height: 100%;
 }
 
-#china {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+#earth.earthHidden {
+  opacity: 0;
 }
 
 .list-item {
@@ -869,5 +1302,373 @@ export default {
 .list-enter,
 .list-leave-to {
   opacity: 0;
+}
+
+#sunburst {
+  width: 380px;
+  height: 680px;
+  position: absolute;
+  border: 1px solid #073067;
+  background-color: rgba(93, 152, 230, .1);
+  border-radius: 10px;
+  right: 0px;
+  top: 60px;
+}
+
+#sunburst>button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #75afff;
+  cursor: pointer;
+}
+
+#sunburst.showLis {
+  animation: showLis 0.6s ease forwards;
+}
+
+#sunburst.hiddenLis {
+  animation: hiddenLis 0.6s ease forwards;
+}
+
+#sunburst.rotateLis {
+  animation: rotateLis 0.6s ease forwards;
+}
+
+#sunburst .cicrelOne img {
+  width: 300px;
+}
+
+#sunburst .optionLis {
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 0;
+  right: 0;
+  color: #75afff;
+  z-index: 999;
+}
+
+#sunburst .optionLis li {
+  position: absolute;
+  width: 100px;
+  cursor: pointer;
+}
+
+#sunburst .optionLis li.active {
+  color: #e07619;
+}
+
+#sunburst .optionLis .cicrel001 {
+  top: -2px;
+  right: 103px;
+}
+
+#sunburst .optionLis .cicrel002 {
+  top: 19px;
+  right: 34px;
+}
+
+#sunburst .optionLis .cicrel003 {
+  top: 64px;
+  right: 5px;
+}
+
+#sunburst .optionLis .cicrel004 {
+  top: 136px;
+  right: -18px;
+}
+
+#sunburst .optionLis .cicrel005 {
+  top: 211px;
+  right: 0;
+}
+
+#sunburst .optionLis .cicrel006 {
+  top: 259px;
+  right: 38px;
+}
+
+#sunburst .optionLis .cicrel007 {
+  top: 290px;
+  right: 106px;
+}
+
+#sunburst .optionLis .cicrel008 {
+  top: 272px;
+  right: 258px;
+}
+
+#sunburst .optionLis .cicrel009 {
+  top: 114px;
+  right: 64px;
+}
+
+#sunburst .optionLis .cicrel010 {
+  top: 227px;
+  right: 150px;
+}
+
+#sunburst .innerContent {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  font-size: 12px;
+}
+
+#sunburst .innerContent .value {
+  color: #e07619;
+}
+
+#sunburst .innerContent .title {
+  color: #75afff;
+}
+
+#sunburst .innerContent p {
+  width: 30%;
+  position: absolute;
+  top: 69px;
+  left: 15px;
+}
+
+#sunburst .innerContent ul {
+  position: absolute;
+  top: 61px;
+  right: 4px;
+}
+
+#sunburst .innerContent li {
+  line-height: 21px;
+}
+
+#sunburst .innerContent p .value {
+  font-size: 24px;
+  display: block;
+}
+
+#sunburst .innerContent p .title {}
+
+#sunburst .cicrel {
+  width: 300px;
+  height: 300px;
+  position: relative;
+}
+
+#sunburst .innCicrel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  border-radius: 50%;
+}
+
+#sunburst .innCicrel span {
+  position: absolute;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  transform-origin: top left;
+  background-color: #75afff;
+}
+
+#sunburst .innCicrel span.active {
+  background-color: #e07619;
+}
+
+#sunburst .cicrel0 {
+  width: 94%;
+  height: 94%;
+  overflow: hidden;
+  transform-origin: center center;
+}
+
+#sunburst .cicrel0 span {
+  width: 180px;
+  height: 180px;
+  top: 50%;
+  left: 50%;
+  transform-origin: top left;
+}
+
+#sunburst .cicrel01 {
+  transform: translate(-50%, -50%) rotateZ(-130deg);
+}
+
+#sunburst .cicrel02 {
+  transform: translate(-50%, -50%) rotateZ(-100deg);
+}
+
+#sunburst .cicrel03 {
+  transform: translate(-50%, -50%) rotateZ(-70deg);
+}
+
+#sunburst .cicrel04 {
+  transform: translate(-50%, -50%) rotateZ(-40deg);
+}
+
+#sunburst .cicrel05 {
+  transform: translate(-50%, -50%) rotateZ(-10deg);
+}
+
+#sunburst .cicrel06 {
+  transform: translate(-50%, -50%) rotateZ(20deg);
+}
+
+#sunburst .cicrel07 {
+  transform: translate(-50%, -50%) rotateZ(50deg);
+}
+
+#sunburst .cicrel08 {
+  transform: translate(-50%, -50%) rotateZ(80deg);
+}
+
+#sunburst .cicrel0 .innerCicrel1 {
+  width: 160px;
+  height: 160px;
+  transform: skew(42deg, 26deg) rotateZ(0deg);
+}
+
+#sunburst .cicrel0 .innerCicrel1 {
+  width: 160px;
+  height: 160px;
+  transform: skew(42deg, 26deg) rotateZ(0deg);
+}
+
+#sunburst .cicrel1 {
+  width: 260px;
+  height: 260px;
+  border: 2px dashed #75afff;
+  background-color: #0c1935;
+}
+
+#sunburst .cicrel2 {
+  width: 240px;
+  height: 240px;
+  border: 8px solid #36598b;
+  overflow: hidden;
+  background-color: #0c1935;
+}
+
+#sunburst .cicrel2 .one {
+  width: 160px;
+  height: 160px;
+  transform: skewY(-19deg) rotateZ(-59deg);
+}
+
+#sunburst .cicrel2 .two {
+  width: 160px;
+  height: 160px;
+  transform: skewY(30deg) rotateZ(13deg);
+}
+
+#sunburst .cicrel3 {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #75afff;
+  background-color: #0c1935;
+}
+
+#sunburst .chooseOne {
+  height: 30px;
+  margin-left: 40px;
+  margin-top: 10px;
+}
+
+#sunburst .chooseOne select {
+  border-radius: 5px;
+  color: #75afff;
+  font-size: 14px;
+  line-height: 18px;
+  border: 1px solid #75afff;
+  background-color: #0c1935;
+}
+
+#sunburst .chooseOne select:last-child {
+  margin-left: 20px;
+}
+
+#dataList {
+  position: absolute;
+  width: 180px;
+  height: 390px;
+  border-radius: 10px;
+  top: 70px;
+  left: 20px;
+  border: 1px solid #073067;
+  background-color: rgba(93, 152, 230, .1);
+  padding: 10px;
+}
+
+#dataList>div {
+  display: flex;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+#dataList img {
+  height: 50px;
+}
+
+#dataList span {
+  width: 80px;
+  text-align: center;
+  line-height: 50px;
+  color: #75afff;
+  width: 160px;
+}
+
+#echarts1 {
+  width: 90%;
+  height: 160px;
+}
+
+#echarts2 {
+  width: 95%;
+  height: 320px;
+}
+
+.imgRotate {
+  background-color: hotpink;
+  animation: imgRotate 4s linear infinite;
+}
+
+@keyframes rotateLis {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@keyframes showLis {
+  from {
+    right: -380px;
+  }
+  to {
+    right: 0px;
+  }
+}
+
+@keyframes hiddenLis {
+  from {
+    right: 0px;
+  }
+  to {
+    right: -380px;
+  }
+}
+
+@keyframes imgRotate {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
 }
 </style>
