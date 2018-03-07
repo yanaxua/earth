@@ -35,53 +35,53 @@
     </div>
     <div id="sunburst" :class="listShow?'showLis':'hiddenLis'">
       <button @click="listShow = false">X</button>
-      <div class="cicrelOne">
-        <ul class="cicrel">
-          <li class="innCicrel cicrel0 cicrel01">
-            <span :class="['innerCicrel1',activeClass==1?'active':'']"></span>
+      <div class="circleOne">
+        <ul class="circle">
+          <li class="inncircle circle0 circle01">
+            <span :class="['innercircle1',activeClass==1?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel02">
-            <span :class="['innerCicrel1',activeClass==2?'active':'']"></span>
+          <li class="inncircle circle0 circle02">
+            <span :class="['innercircle1',activeClass==2?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel03">
-            <span :class="['innerCicrel1',activeClass==3?'active':'']"></span>
+          <li class="inncircle circle0 circle03">
+            <span :class="['innercircle1',activeClass==3?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel04">
-            <span :class="['innerCicrel1',activeClass==4?'active':'']"></span>
+          <li class="inncircle circle0 circle04">
+            <span :class="['innercircle1',activeClass==4?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel05">
-            <span :class="['innerCicrel1',activeClass==5?'active':'']"></span>
+          <li class="inncircle circle0 circle05">
+            <span :class="['innercircle1',activeClass==5?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel06">
-            <span :class="['innerCicrel1',activeClass==6?'active':'']"></span>
+          <li class="inncircle circle0 circle06">
+            <span :class="['innercircle1',activeClass==6?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel07">
-            <span :class="['innerCicrel1',activeClass==7?'active':'']"></span>
+          <li class="inncircle circle0 circle07">
+            <span :class="['innercircle1',activeClass==7?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel0 cicrel08">
-            <span :class="['innerCicrel1',activeClass==8?'active':'']"></span>
+          <li class="inncircle circle0 circle08">
+            <span :class="['innercircle1',activeClass==8?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel1"></li>
-          <li class="innCicrel cicrel2">
+          <li class="inncircle circle1"></li>
+          <li class="inncircle circle2">
             <span :class="['one',activeClassOne==1?'active':'']"></span>
             <span :class="['two',activeClassOne==2?'active':'']"></span>
           </li>
-          <li class="innCicrel cicrel3"></li>
-          <li class="innCicrel cicrel4"></li>
-          <li class="innCicrel cicrel5"></li>
+          <li class="inncircle circle3"></li>
+          <li class="inncircle circle4"></li>
+          <li class="inncircle circle5"></li>
         </ul>
         <ul class="optionLis" v-show="listShow">
-          <!--<li v-for="(item,index) in linkLis" :key="index" :class="['cicrel00'+(index+1),activeClass==index+1?'active':'']" @click="'cicrel00'+(index+1)" v-text="item.name"></li>-->
-          <li :class="['cicrel001',activeClass==1?'active':'']" @click="cicrel001">计量与传感</li>
-          <li :class="['cicrel002',activeClass==2?'active':'']" @click="cicrel002">计量传感网络</li>
-          <li :class="['cicrel003',activeClass==3?'active':'']" @click="cicrel003">IT网络</li>
-          <li :class="['cicrel004',activeClass==4?'active':'']" @click="cicrel004">IDC</li>
-          <li :class="['cicrel005',activeClass==5?'active':'']" @click="cicrel005">监测报告</li>
-          <li :class="['cicrel006',activeClass==6?'active':'']" @click="cicrel006">故障定位</li>
-          <li :class="['cicrel007',activeClass==7?'active':'']" @click="cicrel007">故障修复</li>
-          <li :class="['cicrel008',activeClass==8?'active':'']" @click="cicrel008">远程托管</li>
-          <li :class="['cicrel009',activeClassOne==1?'active':'']" @click="cicrel009">能管</li>
-          <li :class="['cicrel010',activeClassOne==2?'active':'']" @click="cicrel010">中央空调</li>
+          <!--<li v-for="(item,index) in linkLis" :key="index" :class="['circle00'+(index+1),activeClass==index+1?'active':'']" @click="'circle00'+(index+1)" v-text="item.name"></li>-->
+          <li :class="['circle001',activeClass==1?'active':'']" @click="circle001">计量与传感</li>
+          <li :class="['circle002',activeClass==2?'active':'']" @click="circle002">计量传感网络</li>
+          <li :class="['circle003',activeClass==3?'active':'']" @click="circle003">IT网络</li>
+          <li :class="['circle004',activeClass==4?'active':'']" @click="circle004">IDC</li>
+          <li :class="['circle005',activeClass==5?'active':'']" @click="circle005">监测报告</li>
+          <li :class="['circle006',activeClass==6?'active':'']" @click="circle006">故障定位</li>
+          <li :class="['circle007',activeClass==7?'active':'']" @click="circle007">故障修复</li>
+          <li :class="['circle008',activeClass==8?'active':'']" @click="circle008">远程托管</li>
+          <li :class="['circle009',activeClassOne==1?'active':'']" @click="circle009">能管</li>
+          <li :class="['circle010',activeClassOne==2?'active':'']" @click="circle010">中央空调</li>
         </ul>
         <div class="innerContent">
           <p class="fl">
@@ -105,28 +105,28 @@
         </div>
       </div>
       <div class="chooseOne">
-        <!--<select>
-                                                <option value="volvo">拓扑软件</option>
-                                                <option value="saab">图形软件</option>
-                                              </select>
-                                              <select>
-                                                <option value="volvo">软件园二期</option>
-                                                <option value="saab">软件园一期</option>
-                                                <option value="opel">软件园三期</option>
-                                                <option value="audi">软件园四期</option>
-                                              </select>
-                                              <select>
-                                                <option value="volvo">全部</option>
-                                                <option value="saab">一期</option>
-                                                <option value="opel">二期</option>
-                                                <option value="audi">三期</option>
-                                              </select>
-                                              <select>
-                                                <option value="volvo">月</option>
-                                                <option value="saab">年</option>
-                                                <option value="opel">日</option>
-                                                <option value="audi">周</option>
-                                              </select>-->
+        <select>
+          <option value="volvo">拓扑软件</option>
+          <option value="saab">图形软件</option>
+        </select>
+        <select>
+          <option value="volvo">软件园二期</option>
+          <option value="saab">软件园一期</option>
+          <option value="opel">软件园三期</option>
+          <option value="audi">软件园四期</option>
+        </select>
+        <select>
+          <option value="volvo">全部</option>
+          <option value="saab">一期</option>
+          <option value="opel">二期</option>
+          <option value="audi">三期</option>
+        </select>
+        <select>
+          <option value="volvo">月</option>
+          <option value="saab">年</option>
+          <option value="opel">日</option>
+          <option value="audi">周</option>
+        </select>
       </div>
       <div>
         <!--<div id="echarts1"></div>-->
@@ -569,43 +569,43 @@ export default {
     me.toDeep();
 
 
-    // this.earthIns = this.$echarts.init(document.getElementById("earth"));
-    // this.earthIns.showLoading();
-    // this.option.globe.layers[0].texture = this.nationIns;
-    // this.earthIns.setOption(this.option);
-    // /**转动到指定位置 */
-    // /**窗口重置的监听 */
-    // window.addEventListener("resize", me.echartsResize());
-    // setTimeout(function() {
-    //   me.earthIns.hideLoading();
+    this.earthIns = this.$echarts.init(document.getElementById("earth"));
+    this.earthIns.showLoading();
+    this.option.globe.layers[0].texture = this.nationIns;
+    this.earthIns.setOption(this.option);
+    /**转动到指定位置 */
+    /**窗口重置的监听 */
+    window.addEventListener("resize", me.echartsResize());
+    setTimeout(function() {
+      me.earthIns.hideLoading();
     me.legendShow = true;
 
     //   // var echarts1 = me.$echarts.init(document.getElementById("echarts1"));
-    //   var echarts2 = me.$echarts.init(document.getElementById("echarts2"));
+    var echarts2 = me.$echarts.init(document.getElementById("echarts2"));
     //   // echarts1.setOption(me.echarts1);
-    //   echarts2.setOption(me.echarts2)
-    //   setInterval(function() {
-    //     // me.echarts1.series[0].data.shift();
-    //     // me.echarts1.series[0].data.push((180 + Math.random() * 50));
-    //     // echarts1.setOption(me.echarts1);
-    //     me.echarts2.series[0].data.shift();
-    //     me.echarts2.series[0].data.push((1 + Math.random() * 5));
-    //     echarts2.setOption(me.echarts2);
-    //   }, 1000);
-    //   var timerId = setTimeout(function() {
-    //     me.toDeep();
-    //   }, 2000)
-    //   var clearTimerId = function() {
-    //     clearTimeout(timerId);
-    //   }
-    //   window.addEventListener("click", clearTimerId);
+    echarts2.setOption(me.echarts2)
+    setInterval(function() {
+      // me.echarts1.series[0].data.shift();
+      // me.echarts1.series[0].data.push((180 + Math.random() * 50));
+      // echarts1.setOption(me.echarts1);
+      me.echarts2.series[0].data.shift();
+      me.echarts2.series[0].data.push((1 + Math.random() * 5));
+      echarts2.setOption(me.echarts2);
+    }, 1000);
+      var timerId = setTimeout(function() {
+        me.toDeep();
+      }, 2000)
+      var clearTimerId = function() {
+        clearTimeout(timerId);
+      }
+      window.addEventListener("click", clearTimerId);
     setInterval(function() {
       if (me.hoverFlag) {
         var temp = me.errEquipment.splice(0, 1);
         me.errEquipment.push(...temp);
       }
     }, 2000);
-    // }, 1000)
+    }, 1000)
   },
   beforeRouteLeave(to, from, next) {
     /*摧毁echarts实例*/
@@ -880,34 +880,42 @@ export default {
                 marker.setIcon(myIcon2);
                 let tempIcon = marker.getIcon();
                 let count = 0;
+                let end = 15;
                 let innerfunc = function() {
                   count++;
-                  var a = 125 + (286 - 125) / 20 * count;
-                  var b = 120 + (275 - 120) / 20 * count;
+
+                  var a = 125 + (286 - 125) / end * count;
+                  var b = 120 + (275 - 120) / end * count;
                   tempIcon.setSize(new BMap.Size(a, b));
                   tempIcon.setImageSize(new BMap.Size(a, b));
                   tempIcon.setAnchor(new BMap.Size(a / 2, b / 2));
                   marker.setIcon(tempIcon)
-                  if (count <= 25) {
+                  if (count <= end) {
                     animationId = requestAnimationFrame(innerfunc);
                   }
                 }
                 animationId = requestAnimationFrame(innerfunc);
                 var label;
-                // var ahtml = "<span>" + (Math.random() + "").substr(3, 2) + "</span>"
-                //   + "<div style='position:absolute;top:70%;right:5%;transform:translate(100%,-50%);width:380px;'><img style='width:100%;' src='static/image/kuang.png'/></div>"
-                var ahtml = `<span class="imgRotate">${(Math.random() + "").substr(3, 2)}</span>
-                <div style="position:absolute;top:50%;right:7%;transform:translate(100%,-50%);width:380px;height:380px;">
-                  <img style="position:absolute;top:50%;right:0;width:100%;transform:translate(0,-50%);" src="static/image/kuang.png"/>
-                  <div style="position:absolute;top:50%;right:50%;transform:translate(-50%,-50%);">`;
+                var ahtml = `<div class="labelDiv">
+                  <div class="circleContent">
+                    <img class="circleRotate circleRotate1" src="static/circle/1.png" alt="">
+                    <img class="circleRotate circleRotate2" src="static/circle/2.png" alt="">
+                    <img class="circleRotate circleRotate3" src="static/circle/3.png" alt="">
+                    <img class="circleRotate circleRotate4" src="static/circle/4.png" alt="">
+                    <img class="circleRotate circleRotate5" src="static/circle/5.png" alt="">
+                    <img class="circleRotate circleRotate8" src="static/circle/8.png" alt="">
+                  </div>
+                  <p class="labelNumber">${(Math.random() + "").substr(3, 2)}</p>
+                  <div class="circleInfo">
+                  <p class="circleTitle"> <<  ${temp.industryName}</p>
+                  `
                 for (let k = 0; k < temp.equipment.length; k++) {
-                  var tempStr = temp.equipment[k]
-                  ahtml += `<span>${tempStr}</span>`
+                  var tempStr = temp.equipment[k];
+                  ahtml += `<span>${k + 1} 、${tempStr}</span>`
                 }
                 ahtml += "</div></div>";
-                label = marker.getLabel() || new BMap.Label(ahtml, { offset: new BMap.Size(72, 50) });
-                console.log(label);
-                label.setStyle({ width: "200px", height: "200px", lineHeight: "200px", textAlign: "center", cursor: "pointer", color: "#fff", fontSize: "50px", fontWeight: "700", backgroundColor: "transparent", border: "none", display: "block" });
+                label = marker.getLabel() || new BMap.Label(ahtml);
+                label.setStyle({ width: "200px", height: "200px", cursor: "pointer", backgroundColor: "transparent", border: "none", display: "block" });
                 marker.setLabel(label);
               });
               // 鼠标离开时,隐藏详情
@@ -1037,51 +1045,51 @@ export default {
         setTimeout(resolve(), time);
       });
     },
-    cicrel001() {
+    circle001() {
       this.iframeShow = true;
       this.activeClass = 1;
       window.open('./yanshi/jiliangqiju_nengguan.html', 'aiframe');
     },
-    cicrel002() {
+    circle002() {
       this.iframeShow = true;
       this.activeClass = 2;
       window.open('./yanshi/zhinengchuanganwangluo.html', 'aiframe');
     },
-    cicrel003() {
+    circle003() {
       this.iframeShow = true;
       this.activeClass = 3;
       window.open('./yanshi/itwangluo_nengguan.html', 'aiframe');
     },
-    cicrel004() {
+    circle004() {
       this.iframeShow = true;
       this.activeClass = 4;
       window.open('./yanshi/idc_nengguan.html', 'aiframe');
     },
-    cicrel005() {
+    circle005() {
       this.iframeShow = true;
       this.activeClass = 5;
       window.open('./yanshi/jiancebaogao_neirong_nengguan.html', 'aiframe');
     },
-    cicrel006() {
+    circle006() {
       this.iframeShow = true;
       this.activeClass = 6;
       window.open('./yanshi/keshihuajiance.html', 'aiframe');
     },
-    cicrel007() {
+    circle007() {
       this.iframeShow = true;
       this.activeClass = 7;
       window.open('./yanshi/guzhangxiufu_xiangqing.html', 'aiframe');
     },
-    cicrel008() {
+    circle008() {
       this.iframeShow = true;
       this.activeClass = 8;
       window.open('./yanshi/yuanchengyemian.html', 'aiframe');
     },
-    cicrel009() {
+    circle009() {
       this.activeClassOne = 1;
       // this.iframeShow = true;
     },
-    cicrel010() {
+    circle010() {
       this.activeClassOne = 2;
       // this.iframeShow = true;
     },
@@ -1335,7 +1343,7 @@ export default {
   animation: rotateLis 0.6s ease forwards;
 }
 
-#sunburst .cicrelOne img {
+#sunburst .circleOne img {
   width: 300px;
 }
 
@@ -1359,52 +1367,52 @@ export default {
   color: #e07619;
 }
 
-#sunburst .optionLis .cicrel001 {
+#sunburst .optionLis .circle001 {
   top: -2px;
   right: 103px;
 }
 
-#sunburst .optionLis .cicrel002 {
+#sunburst .optionLis .circle002 {
   top: 19px;
   right: 34px;
 }
 
-#sunburst .optionLis .cicrel003 {
+#sunburst .optionLis .circle003 {
   top: 64px;
   right: 5px;
 }
 
-#sunburst .optionLis .cicrel004 {
+#sunburst .optionLis .circle004 {
   top: 136px;
   right: -18px;
 }
 
-#sunburst .optionLis .cicrel005 {
+#sunburst .optionLis .circle005 {
   top: 211px;
   right: 0;
 }
 
-#sunburst .optionLis .cicrel006 {
+#sunburst .optionLis .circle006 {
   top: 259px;
   right: 38px;
 }
 
-#sunburst .optionLis .cicrel007 {
+#sunburst .optionLis .circle007 {
   top: 290px;
   right: 106px;
 }
 
-#sunburst .optionLis .cicrel008 {
+#sunburst .optionLis .circle008 {
   top: 272px;
   right: 258px;
 }
 
-#sunburst .optionLis .cicrel009 {
+#sunburst .optionLis .circle009 {
   top: 114px;
   right: 64px;
 }
 
-#sunburst .optionLis .cicrel010 {
+#sunburst .optionLis .circle010 {
   top: 227px;
   right: 150px;
 }
@@ -1451,13 +1459,13 @@ export default {
 
 #sunburst .innerContent p .title {}
 
-#sunburst .cicrel {
+#sunburst .circle {
   width: 300px;
   height: 300px;
   position: relative;
 }
 
-#sunburst .innCicrel {
+#sunburst .inncircle {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1466,7 +1474,7 @@ export default {
   border-radius: 50%;
 }
 
-#sunburst .innCicrel span {
+#sunburst .inncircle span {
   position: absolute;
   display: inline-block;
   top: 50%;
@@ -1475,18 +1483,18 @@ export default {
   background-color: #75afff;
 }
 
-#sunburst .innCicrel span.active {
+#sunburst .inncircle span.active {
   background-color: #e07619;
 }
 
-#sunburst .cicrel0 {
+#sunburst .circle0 {
   width: 94%;
   height: 94%;
   overflow: hidden;
   transform-origin: center center;
 }
 
-#sunburst .cicrel0 span {
+#sunburst .circle0 span {
   width: 180px;
   height: 180px;
   top: 50%;
@@ -1494,58 +1502,58 @@ export default {
   transform-origin: top left;
 }
 
-#sunburst .cicrel01 {
+#sunburst .circle01 {
   transform: translate(-50%, -50%) rotateZ(-130deg);
 }
 
-#sunburst .cicrel02 {
+#sunburst .circle02 {
   transform: translate(-50%, -50%) rotateZ(-100deg);
 }
 
-#sunburst .cicrel03 {
+#sunburst .circle03 {
   transform: translate(-50%, -50%) rotateZ(-70deg);
 }
 
-#sunburst .cicrel04 {
+#sunburst .circle04 {
   transform: translate(-50%, -50%) rotateZ(-40deg);
 }
 
-#sunburst .cicrel05 {
+#sunburst .circle05 {
   transform: translate(-50%, -50%) rotateZ(-10deg);
 }
 
-#sunburst .cicrel06 {
+#sunburst .circle06 {
   transform: translate(-50%, -50%) rotateZ(20deg);
 }
 
-#sunburst .cicrel07 {
+#sunburst .circle07 {
   transform: translate(-50%, -50%) rotateZ(50deg);
 }
 
-#sunburst .cicrel08 {
+#sunburst .circle08 {
   transform: translate(-50%, -50%) rotateZ(80deg);
 }
 
-#sunburst .cicrel0 .innerCicrel1 {
+#sunburst .circle0 .innercircle1 {
   width: 160px;
   height: 160px;
   transform: skew(42deg, 26deg) rotateZ(0deg);
 }
 
-#sunburst .cicrel0 .innerCicrel1 {
+#sunburst .circle0 .innercircle1 {
   width: 160px;
   height: 160px;
   transform: skew(42deg, 26deg) rotateZ(0deg);
 }
 
-#sunburst .cicrel1 {
+#sunburst .circle1 {
   width: 260px;
   height: 260px;
   border: 2px dashed #75afff;
   background-color: #0c1935;
 }
 
-#sunburst .cicrel2 {
+#sunburst .circle2 {
   width: 240px;
   height: 240px;
   border: 8px solid #36598b;
@@ -1553,19 +1561,19 @@ export default {
   background-color: #0c1935;
 }
 
-#sunburst .cicrel2 .one {
+#sunburst .circle2 .one {
   width: 160px;
   height: 160px;
   transform: skewY(-19deg) rotateZ(-59deg);
 }
 
-#sunburst .cicrel2 .two {
+#sunburst .circle2 .two {
   width: 160px;
   height: 160px;
   transform: skewY(30deg) rotateZ(13deg);
 }
 
-#sunburst .cicrel3 {
+#sunburst .circle3 {
   width: 200px;
   height: 200px;
   border: 1px solid #75afff;
@@ -1632,8 +1640,136 @@ export default {
 }
 
 .imgRotate {
-  background-color: hotpink;
   animation: imgRotate 4s linear infinite;
+}
+
+.labelDiv {
+  position: absolute;
+  top: -36px;
+  left: 0;
+  width: 650px;
+  height: 340px;
+}
+
+.circleContent {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  top: 50%;
+  left: 23%;
+  transform: translate(-50%, -50%);
+}
+
+.labelNumber {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  top: 50%;
+  left: 23%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 56px;
+  font-weight: 700;
+}
+
+.circleInfo {
+  position: absolute;
+  top: 50%;
+  left: 38%;
+  width: 410px;
+  height: 250px;
+  transform: translate(0%, -50%);
+  background-image: url("../../static/image/kuang.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding-left: 30px;
+}
+
+.circleInfo .circleTitle {
+  font-size: 18px;
+  color: #fff;
+  margin-top: 28px;
+}
+
+.circleInfo span {
+  display: block;
+  font-size: 14px;
+  color: #fff;
+}
+
+.circleRotate {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  animation-name: circleRotate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  user-select: none;
+}
+
+.circleRotate1 {
+  animation-duration: 16s;
+  animation-direction: normal;
+}
+
+.circleRotate2 {
+  animation-duration: 20s;
+  animation-direction: normal;
+  width: 120%;
+}
+
+.circleRotate3 {
+  animation-duration: 18s;
+  animation-direction: normal;
+  width: 72%;
+}
+
+.circleRotate4 {
+  animation-duration: 18s;
+  animation-direction: reverse;
+  width: 102%;
+}
+
+.circleRotate5 {
+  animation-duration: 18s;
+  animation-direction: normal;
+  width: 91%;
+}
+
+.circleRotate6 {
+  animation-duration: 18s;
+  animation-direction: reverse;
+  width: 120%;
+}
+
+.circleRotate7 {
+  animation-duration: 18s;
+  animation-direction: normal;
+  width: 120%;
+}
+
+.circleRotate8 {
+  animation-duration: 8s;
+  animation-direction: reverse;
+  width: 63%;
+}
+
+.circleRotate9 {
+  animation-duration: 18s;
+  animation-direction: normal;
+  width: 120%;
+}
+
+@keyframes circleRotate {
+  from {
+    transform: translate(-50%, -50%) rotateZ(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateZ(360deg);
+  }
 }
 
 @keyframes rotateLis {

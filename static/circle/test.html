@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /** {
+      margin: 0;
+      padding: 0;
+    }*/
+
+    .cicrelContent {
+      width: 200px;
+      height: 200px;
+      position: absolute;
+    }
+
+    .cicrelRotate {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      animation-name: cicrelRotate;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      user-select: none;
+    }
+
+    .cicrelRotate1 {
+      animation-duration: 16s;
+      animation-direction: normal;
+    }
+
+    .cicrelRotate2 {
+      animation-duration: 20s;
+      animation-direction: normal;
+      width: 120%;
+    }
+
+    .cicrelRotate3 {
+      animation-duration: 18s;
+      animation-direction: normal;
+      width: 72%;
+    }
+
+    .cicrelRotate4 {
+      animation-duration: 18s;
+      animation-direction: reverse;
+      width: 102%;
+    }
+
+    .cicrelRotate5 {
+      animation-duration: 18s;
+      animation-direction: normal;
+      width: 91%;
+    }
+
+    .cicrelRotate6 {
+      animation-duration: 18s;
+      animation-direction: reverse;
+      width: 120%;
+    }
+
+    .cicrelRotate7 {
+      animation-duration: 18s;
+      animation-direction: normal;
+      width: 120%;
+    }
+
+    .cicrelRotate8 {
+      animation-duration: 8s;
+      animation-direction: reverse;
+      width: 63%;
+    }
+
+    .cicrelRotate9 {
+      animation-duration: 18s;
+      animation-direction: normal;
+      width: 120%;
+    }
+
+    @keyframes cicrelRotate {
+      from {
+        transform: translate(-50%, -50%) rotateZ(0deg);
+      }
+      to {
+        transform: translate(-50%, -50%) rotateZ(360deg);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="cicrelContent">
+    <img class="cicrelRotate cicrelRotate1" src="./1.png" alt="">
+    <img class="cicrelRotate cicrelRotate2" src="./2.png" alt="">
+    <img class="cicrelRotate cicrelRotate3" src="./3.png" alt="">
+    <img class="cicrelRotate cicrelRotate4" src="./4.png" alt="">
+    <img class="cicrelRotate cicrelRotate5" src="./5.png" alt="">
+    <img class="cicrelRotate cicrelRotate8" src="./8.png" alt="">
+  </div>
+</body>
+
+</html>
