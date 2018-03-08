@@ -4,7 +4,6 @@
     </div>
     <div key="world" v-show="worldShow" id="world" :class="'list-item'"></div>
     <!--故障列表滑动框-->
-    <div id="company" v-text="industryName"></div>
     <div id="legend" v-show="legendShow">
       <!--隐藏图例图片-->
       <div v-show="false" v-for="(item,key) in legendPath" :key="key">
@@ -12,7 +11,8 @@
         <span v-text="item.name" :class="item.type"></span>
       </div>
     </div>
-    <div id="dataList">
+    <!--企业列表-->
+    <div id="companyLis">
       <div v-for="(item,index) in equipmentList" :key="index" @click="toErr(item)">
         <img :src="'static/logo/'+item.path+'.png'" :alt="item.industryName">
         <span v-text="item.industryName"></span>
@@ -578,20 +578,20 @@ export default {
     window.addEventListener("resize", me.echartsResize());
     setTimeout(function() {
       me.earthIns.hideLoading();
-    me.legendShow = true;
+      me.legendShow = true;
 
-    //   // var echarts1 = me.$echarts.init(document.getElementById("echarts1"));
-    var echarts2 = me.$echarts.init(document.getElementById("echarts2"));
-    //   // echarts1.setOption(me.echarts1);
-    echarts2.setOption(me.echarts2)
-    setInterval(function() {
-      // me.echarts1.series[0].data.shift();
-      // me.echarts1.series[0].data.push((180 + Math.random() * 50));
-      // echarts1.setOption(me.echarts1);
-      me.echarts2.series[0].data.shift();
-      me.echarts2.series[0].data.push((1 + Math.random() * 5));
-      echarts2.setOption(me.echarts2);
-    }, 1000);
+      //   // var echarts1 = me.$echarts.init(document.getElementById("echarts1"));
+      var echarts2 = me.$echarts.init(document.getElementById("echarts2"));
+      //   // echarts1.setOption(me.echarts1);
+      echarts2.setOption(me.echarts2)
+      setInterval(function() {
+        // me.echarts1.series[0].data.shift();
+        // me.echarts1.series[0].data.push((180 + Math.random() * 50));
+        // echarts1.setOption(me.echarts1);
+        me.echarts2.series[0].data.shift();
+        me.echarts2.series[0].data.push((1 + Math.random() * 5));
+        echarts2.setOption(me.echarts2);
+      }, 1000);
       var timerId = setTimeout(function() {
         me.toDeep();
       }, 2000)
@@ -599,12 +599,12 @@ export default {
         clearTimeout(timerId);
       }
       window.addEventListener("click", clearTimerId);
-    setInterval(function() {
-      if (me.hoverFlag) {
-        var temp = me.errEquipment.splice(0, 1);
-        me.errEquipment.push(...temp);
-      }
-    }, 2000);
+      setInterval(function() {
+        if (me.hoverFlag) {
+          var temp = me.errEquipment.splice(0, 1);
+          me.errEquipment.push(...temp);
+        }
+      }, 2000);
     }, 1000)
   },
   beforeRouteLeave(to, from, next) {
@@ -872,7 +872,7 @@ export default {
                 var tempB = temp.equipment[j];
                 tempHtml += "<p>" + (j + 1) + " . " + tempB + "</p>"
               }
-              var infoWindow = new BMap.InfoWindow(tempHtml, opts);  // 创建信息窗口对象
+              // var infoWindow = new BMap.InfoWindow(tempHtml, opts);  // 创建信息窗口对象
               let animationId = null;
               marker.addEventListener("mouseover", function(e) {
                 cancelAnimationFrame(animationId);
@@ -883,20 +883,18 @@ export default {
                 let end = 15;
                 let innerfunc = function() {
                   count++;
-
                   var a = 125 + (286 - 125) / end * count;
                   var b = 120 + (275 - 120) / end * count;
                   tempIcon.setSize(new BMap.Size(a, b));
                   tempIcon.setImageSize(new BMap.Size(a, b));
-                  tempIcon.setAnchor(new BMap.Size(a / 2, b / 2));
+                  tempIcon.setAnchor(new BMap.Size(a / 2, b / 2+30));
                   marker.setIcon(tempIcon)
-                  if (count <= end) {
+                  if (count < end) {
                     animationId = requestAnimationFrame(innerfunc);
                   }
-                }
-                animationId = requestAnimationFrame(innerfunc);
-                var label;
-                var ahtml = `<div class="labelDiv">
+                  if (count == end) {
+                    var label;
+                    var ahtml = `<div class="labelDiv">
                   <div class="circleContent">
                     <img class="circleRotate circleRotate1" src="static/circle/1.png" alt="">
                     <img class="circleRotate circleRotate2" src="static/circle/2.png" alt="">
@@ -909,20 +907,24 @@ export default {
                   <div class="circleInfo">
                   <p class="circleTitle"> <<  ${temp.industryName}</p>
                   `
-                for (let k = 0; k < temp.equipment.length; k++) {
-                  var tempStr = temp.equipment[k];
-                  ahtml += `<span>${k + 1} 、${tempStr}</span>`
+                    for (let k = 0; k < temp.equipment.length; k++) {
+                      var tempStr = temp.equipment[k];
+                      ahtml += `<span>${k + 1} 、${tempStr}</span>`
+                    }
+                    ahtml += "</div></div>";
+                    label = marker.getLabel() || new BMap.Label(ahtml);
+                    label.setStyle({ width: "200px", height: "200px", cursor: "pointer", backgroundColor: "transparent", border: "none", display: "block" });
+                    marker.setLabel(label);
+                    marker.setIcon(marker.getIcon().setImageUrl(""));
+                  }
                 }
-                ahtml += "</div></div>";
-                label = marker.getLabel() || new BMap.Label(ahtml);
-                label.setStyle({ width: "200px", height: "200px", cursor: "pointer", backgroundColor: "transparent", border: "none", display: "block" });
-                marker.setLabel(label);
+                animationId = requestAnimationFrame(innerfunc);
               });
               // 鼠标离开时,隐藏详情
               marker.addEventListener("mouseout", function(e) {
                 cancelAnimationFrame(animationId);
-                marker.setIcon(myIcon);
-                marker.getLabel().setStyle({ display: "none" });
+                // marker.setIcon(myIcon);
+                marker.getLabel() && marker.getLabel().setStyle({ display: "none" });
                 // setTimeout(function() { marker.closeInfoWindow(); }, 1000)
               });
               me.markerLis.push(marker);
@@ -1134,14 +1136,6 @@ export default {
   list-style: none;
 }
 
-#company {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 100px;
-  height: 20px;
-}
-
 #legend {
   position: absolute;
   right: 20px;
@@ -1285,8 +1279,8 @@ export default {
   left: 0;
   background: url("../../static/image/net.png");
   background-size: 400px 225px;
-  /*background-color: #030b21;*/
-  background-color: rgba(54, 89, 139, .8) !important;
+  background-color: #030b21 !important;
+  /*background-color: rgba(54, 89, 139, .8) !important;*/
 }
 
 #earth {
@@ -1599,7 +1593,7 @@ export default {
   margin-left: 20px;
 }
 
-#dataList {
+#companyLis {
   position: absolute;
   width: 180px;
   height: 390px;
@@ -1611,17 +1605,17 @@ export default {
   padding: 10px;
 }
 
-#dataList>div {
+#companyLis>div {
   display: flex;
   margin-bottom: 15px;
   cursor: pointer;
 }
 
-#dataList img {
+#companyLis img {
   height: 50px;
 }
 
-#dataList span {
+#companyLis span {
   width: 80px;
   text-align: center;
   line-height: 50px;
@@ -1645,8 +1639,8 @@ export default {
 
 .labelDiv {
   position: absolute;
-  top: -36px;
-  left: 0;
+  top: -21px;
+  left: -1px;
   width: 650px;
   height: 340px;
 }
