@@ -746,7 +746,7 @@ export default {
 
               me.markerLis.push(marker);
               me.bdMap.addOverlay(marker);
-              var label = new BMap.Label(temp.industryName, { offset: new BMap.Size(20, -10) });/*创建文字框*/
+              var label = new BMap.Label(temp.industryName);/*创建文字框*/
               label.setStyle({ cursor: "pointer" });
               label.addEventListener("click", function(e) {/**文本框点击事件 */
                 // window.location.href = "./yanshi/jiliangqiju.html";
